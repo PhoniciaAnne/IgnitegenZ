@@ -7,6 +7,7 @@ import Mentorship from './pages/Mentorship'
 import Networking from './pages/Networking'
 import Funding from './pages/Funding'
 import Contact from './pages/Contact'
+import Admin from './pages/Admin'
 import './App.css'
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
           <Route path="/networking" element={<Networking />} />
           <Route path="/funding" element={<Funding />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
       <Footer />

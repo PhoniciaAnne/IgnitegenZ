@@ -37,7 +37,7 @@ export default function Home() {
             Together <span>We Thrive</span>
           </h1>
           <p className={styles.heroSubtitle}>
-            Ignite Zen is where ambitious student entrepreneurs transform bold ideas into real ventures — with mentorship, education, community, and funding access.
+            IgniteZen is where ambitious student entrepreneurs transform bold ideas into real ventures — with mentorship, education, community, and funding access.
           </p>
           <div className={styles.heroCta}>
             <Link to="/contact" className="btn-primary">Start Your Journey</Link>
@@ -128,7 +128,7 @@ export default function Home() {
           <div className={styles.ctaBox}>
             <div className={styles.ctaGlow}></div>
             <h2>Ready to Build Something <span>Extraordinary?</span></h2>
-            <p>Join hundreds of student entrepreneurs who are turning ideas into impact with Ignite Zen.</p>
+            <p>Join hundreds of student entrepreneurs who are turning ideas into impact with IgniteZen.</p>
             <div className={styles.ctaBtns}>
               <Link to="/contact" className="btn-primary">Apply Now</Link>
               <Link to="/mentorship" className="btn-outline">Meet Our Mentors</Link>

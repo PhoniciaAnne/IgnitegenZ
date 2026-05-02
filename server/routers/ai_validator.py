@@ -6,22 +6,22 @@ from server.models import StartupValidationRequest, StartupValidationResponse
 
 router = APIRouter(prefix="/api/ai", tags=["ai"])
 
-REPLIT_AI_API_KEY = os.getenv("REPLIT_AI_API_KEY", "")
 
+async def call_ai(prompt: str) -> str:
+    api_key = os.getenv("REPLIT_AI_API_KEY", "").strip()
+    if not api_key:
+        raise HTTPException(
+            status_code=503,
+            detail="AI_KEY_MISSING: Please add REPLIT_AI_API_KEY to your Secrets (lock icon in sidebar)."
+        )
 
-async def call_replit_model_farm(prompt: str) -> str:
     headers = {
         "Content-Type": "application/json",
-        "Authorization": f"Bearer {REPLIT_AI_API_KEY}"
+        "Authorization": f"Bearer {api_key}"
     }
     payload = {
         "model": "claude-3-5-haiku",
-        "messages": [
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
+        "messages": [{"role": "user", "content": prompt}],
         "max_tokens": 1500
     }
 
@@ -36,50 +36,51 @@ async def call_replit_model_farm(prompt: str) -> str:
                 data = response.json()
                 return data["content"][0]["text"]
             else:
-                raise HTTPException(status_code=response.status_code, detail=f"AI API error: {response.text}")
+                raise HTTPException(
+                    status_code=response.status_code,
+                    detail=f"AI API error: {response.text}"
+                )
     except httpx.TimeoutException:
         raise HTTPException(status_code=504, detail="AI request timed out. Please try again.")
 
 
 @router.post("/validate", response_model=StartupValidationResponse)
 async def validate_startup(request: StartupValidationRequest):
-    if not request.idea.strip():
-        raise HTTPException(status_code=400, detail="Please provide a startup idea to validate.")
+    if not request.idea.strip() or len(request.idea.strip()) < 10:
+        raise HTTPException(status_code=400, detail="Please describe your idea in at least 10 characters.")
 
-    if len(request.idea) < 10:
-        raise HTTPException(status_code=400, detail="Please describe your idea in more detail.")
-
-    prompt = f"""You are an expert startup analyst and business strategist. Analyze the following startup idea and provide a structured validation report.
+    prompt = f"""You are an expert startup analyst. Analyze this startup idea and return ONLY a valid JSON object with no markdown or code fences.
 
 Startup Idea: {request.idea}
 
-Respond ONLY with a valid JSON object (no markdown, no code blocks) in this exact format:
+Return exactly this JSON structure:
 {{
-  "problem": "Clear description of the problem this startup solves (2-3 sentences)",
-  "solution": "How the startup addresses this problem with its product or service (2-3 sentences)",
-  "market_analysis": "Target market size, growth potential, key segments, and competitive landscape (3-4 sentences)",
-  "value_proposition": "The unique value and competitive advantage this startup offers to customers (2-3 sentences)",
-  "feasibility_score": <integer between 1-100 representing overall feasibility>,
+  "problem": "2-3 sentence description of the core problem being solved",
+  "solution": "2-3 sentence description of how this startup solves it",
+  "market_analysis": "3-4 sentences on market size, growth potential, and competitive landscape",
+  "value_proposition": "2-3 sentences on unique value and competitive advantage",
+  "feasibility_score": 72,
   "recommendations": [
-    "Specific actionable recommendation 1",
-    "Specific actionable recommendation 2",
-    "Specific actionable recommendation 3",
-    "Specific actionable recommendation 4"
+    "Actionable recommendation 1",
+    "Actionable recommendation 2",
+    "Actionable recommendation 3",
+    "Actionable recommendation 4"
   ]
 }}"""
 
     try:
-        raw_response = await call_replit_model_farm(prompt)
-        cleaned = raw_response.strip()
-        if cleaned.startswith("```"):
+        raw = await call_ai(prompt)
+        cleaned = raw.strip()
+        if "```" in cleaned:
             cleaned = cleaned.split("```")[1]
             if cleaned.startswith("json"):
                 cleaned = cleaned[4:]
             cleaned = cleaned.strip()
-
         data = json.loads(cleaned)
         return StartupValidationResponse(**data)
-    except json.JSONDecodeError as e:
-        raise HTTPException(status_code=500, detail=f"Failed to parse AI response. Please try again.")
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=500, detail="Failed to parse AI response. Please try again.")
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

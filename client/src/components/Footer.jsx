@@ -20,7 +20,7 @@ export default function Footer() {
                     </linearGradient>
                   </defs>
                 </svg>
-                <span className={styles.logoText}>Ignite<span>Zen</span></span>
+                <span className={styles.logoText}>IgniteZen</span>
               </div>
               <p className={styles.tagline}>Together We Thrive</p>
               <p className={styles.desc}>
@@ -55,6 +55,7 @@ export default function Footer() {
                 <li><a href="#">Twitter / X</a></li>
                 <li><a href="#">Instagram</a></li>
                 <li><a href="mailto:hello@ignitezen.in">hello@ignitezen.in</a></li>
+                <li><a href="/admin">Admin Panel</a></li>
               </ul>
             </div>
           </div>
@@ -62,7 +63,7 @@ export default function Footer() {
       </div>
       <div className={styles.bottom}>
         <div className="container">
-          <p>© {new Date().getFullYear()} Ignite Zen. All rights reserved. Built for ambitious entrepreneurs.</p>
+          <p>© {new Date().getFullYear()} IgniteZen. All rights reserved. Built for ambitious entrepreneurs.</p>
         </div>
       </div>
     </footer>

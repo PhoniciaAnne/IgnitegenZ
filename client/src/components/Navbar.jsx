@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Networking', path: '/networking' },
   { label: 'Funding', path: '/funding' },
   { label: 'Contact Us', path: '/contact' },
+  { label: 'Admin', path: '/admin' },
 ]
 
 export default function Navbar() {
@@ -41,7 +42,7 @@ export default function Navbar() {
               </defs>
             </svg>
           </div>
-          <span className={styles.logoText}>Ignite<span>Zen</span></span>
+          <span className={styles.logoText}>IgniteZen</span>
         </Link>
 
         <ul className={`${styles.navLinks} ${menuOpen ? styles.open : ''}`}>
