@@ -15,7 +15,7 @@ export default function Mentorship() {
 
   useEffect(() => {
     setLoading(true)
-    axios.get(`/api/mentors${category !== 'All' ? `?category=${category}` : ''}`)
+    axios.get(`/api/mentors/${category !== 'All' ? `?category=${category}` : ''}`)
       .then(r => setMentors(r.data))
       .catch(() => {})
       .finally(() => setLoading(false))

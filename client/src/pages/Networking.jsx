@@ -24,7 +24,7 @@ export default function Networking() {
     const params = new URLSearchParams()
     if (city !== 'All') params.append('city', city)
     if (search) params.append('search', search)
-    axios.get(`/api/institutes?${params}`)
+    axios.get(`/api/institutes/?${params}`)
       .then(r => setInstitutes(r.data))
       .catch(() => {})
       .finally(() => setLoading(false))
