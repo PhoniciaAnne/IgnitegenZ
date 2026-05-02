@@ -1,13 +1,6 @@
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import styles from './Learning.module.css'
-
-const courses = [
-  { icon: '🚀', title: 'Entrepreneurship Fundamentals', category: 'Foundation', duration: '6 weeks', certified: true, level: 'Beginner', desc: 'Learn the core principles of building a startup — from idea generation to business model design.' },
-  { icon: '💰', title: 'Startup Fundraising Mastery', category: 'Finance', duration: '4 weeks', certified: true, level: 'Intermediate', desc: 'Understand investor psychology, pitch decks, term sheets, and navigating the fundraising process.' },
-  { icon: '🎯', title: 'Product-Market Fit', category: 'Strategy', duration: '5 weeks', certified: true, level: 'Intermediate', desc: 'Discover proven frameworks to validate your idea, find your early adopters, and achieve PMF.' },
-  { icon: '🌿', title: 'Sustainable Business Design', category: 'Sustainability', duration: '4 weeks', certified: true, level: 'Beginner', desc: 'Build businesses that create positive environmental and social impact alongside profit.' },
-  { icon: '📱', title: 'Digital Product Development', category: 'Technology', duration: '8 weeks', certified: true, level: 'Intermediate', desc: 'From wireframes to MVP — learn no-code and low-code tools to build your first product.' },
-  { icon: '🤝', title: 'Startup Marketing & Growth', category: 'Marketing', duration: '5 weeks', certified: true, level: 'Beginner', desc: 'Growth hacking, content marketing, and community building strategies for early-stage startups.' },
-]
 
 const masterclasses = [
   { icon: '👑', speaker: 'Vasudeva Vangara', topic: 'Zero to MVP in 90 Days', date: 'Every 1st Saturday', seats: 24 },
@@ -23,23 +16,46 @@ const liveSessions = [
   { day: 'Sun', title: 'Founders Circle Meetup', host: 'Community Lead', time: '11:00 AM IST' },
 ]
 
+const CATEGORIES = ['All', 'Foundation', 'Strategy', 'Finance', 'Technology', 'Marketing', 'Sustainability']
+
+const levelColors = {
+  Beginner: { bg: '#d1fae5', color: '#059669' },
+  Intermediate: { bg: '#dbeafe', color: '#2563eb' },
+  Advanced: { bg: '#fef3c7', color: '#d97706' },
+}
+
 export default function Learning() {
+  const [courses, setCourses] = useState([])
+  const [category, setCategory] = useState('All')
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    setLoading(true)
+    const params = new URLSearchParams()
+    if (category !== 'All') params.append('category', category)
+    axios.get(`/api/courses/?${params}`)
+      .then(r => setCourses(r.data))
+      .catch(() => setCourses([]))
+      .finally(() => setLoading(false))
+  }, [category])
+
   return (
     <div>
       <div className="page-hero">
         <div className="page-hero-content container">
           <span className="section-tag" style={{ background: 'rgba(255,255,255,0.15)', color: 'white' }}>Education Hub</span>
           <h1>Learn. Build. <em style={{ fontStyle: 'normal', color: '#c084fc' }}>Succeed.</em></h1>
-          <p>World-class entrepreneurship education designed for ambitious student founders at every stage of the journey.</p>
+          <p>Free entrepreneurship courses designed for ambitious student founders — certified, practical, and 100% free.</p>
         </div>
       </div>
 
+      {/* Live Sessions */}
       <section className={styles.section}>
         <div className="container">
           <div className={styles.sectionHeader}>
             <span className="section-tag">Live Lectures</span>
             <h2 className="section-title">Weekly <span>Live Sessions</span></h2>
-            <p className="section-subtitle">Join live interactive sessions every week. Ask questions, network with peers, and learn from practitioners building real companies.</p>
+            <p className="section-subtitle">Join live interactive sessions every week with practitioners building real companies.</p>
           </div>
           <div className={styles.liveGrid}>
             {liveSessions.map((s, i) => (
@@ -57,40 +73,96 @@ export default function Learning() {
         </div>
       </section>
 
+      {/* Free Courses */}
       <section className={`${styles.section} ${styles.sectionBg}`}>
         <div className="container">
           <div className={styles.sectionHeader}>
-            <span className="section-tag">Certified Courses</span>
-            <h2 className="section-title">Industry-Recognized <span>Certifications</span></h2>
-            <p className="section-subtitle">Complete structured learning paths and earn certifications that prove your entrepreneurial skills to the world.</p>
+            <span className="section-tag">Free Certified Courses</span>
+            <h2 className="section-title">Start Learning <span>For Free</span></h2>
+            <p className="section-subtitle">
+              {courses.length > 0 ? `${courses.length} free courses available` : 'Curated courses across all entrepreneurship domains'} — earn certificates, build skills, launch faster.
+            </p>
           </div>
-          <div className={styles.coursesGrid}>
-            {courses.map((c, i) => (
-              <div key={i} className={`card ${styles.courseCard}`}>
-                <div className={styles.courseIcon}>{c.icon}</div>
-                <div className={styles.courseMeta}>
-                  <span className={styles.courseCategory}>{c.category}</span>
-                  <span className={styles.courseLevel}>{c.level}</span>
-                </div>
-                <h3>{c.title}</h3>
-                <p>{c.desc}</p>
-                <div className={styles.courseFooter}>
-                  <span>⏱ {c.duration}</span>
-                  {c.certified && <span className={styles.certBadge}>✓ Certificate</span>}
-                </div>
-                <button className={`btn-primary ${styles.courseBtn}`}>Enroll Free</button>
-              </div>
+
+          {/* Category Filter */}
+          <div className={styles.filters}>
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                className={`${styles.filterBtn} ${category === cat ? styles.active : ''}`}
+                onClick={() => setCategory(cat)}
+              >
+                {cat}
+              </button>
             ))}
           </div>
+
+          {loading ? (
+            <div className={styles.loading}>
+              <div className={styles.spinner}></div>
+              <p>Loading courses...</p>
+            </div>
+          ) : courses.length === 0 ? (
+            <div className={styles.empty}><p>No courses found for this category.</p></div>
+          ) : (
+            <div className={styles.coursesGrid}>
+              {courses.map(c => {
+                const lvl = levelColors[c.level] || levelColors.Beginner
+                return (
+                  <div key={c.id} className={`card ${styles.courseCard}`}>
+                    <div className={styles.courseTop}>
+                      <span className={styles.courseIcon}>{c.icon}</span>
+                      <span className={styles.freeBadge}>FREE</span>
+                    </div>
+
+                    <div className={styles.courseMeta}>
+                      <span className={styles.courseCategory}>{c.category}</span>
+                      <span className={styles.courseLevel} style={{ background: lvl.bg, color: lvl.color }}>{c.level}</span>
+                    </div>
+
+                    <h3 className={styles.courseTitle}>{c.title}</h3>
+                    <p className={styles.courseDesc}>{c.desc}</p>
+
+                    <div className={styles.courseTopics}>
+                      {c.topics.slice(0, 3).map(t => (
+                        <span key={t} className={styles.topicTag}>{t}</span>
+                      ))}
+                    </div>
+
+                    <div className={styles.courseStats}>
+                      <span>⏱ {c.duration}</span>
+                      <span>📖 {c.lessons} lessons</span>
+                      <span>👥 {c.students.toLocaleString()}</span>
+                    </div>
+
+                    <div className={styles.courseFooter}>
+                      {c.certified && <span className={styles.certBadge}>✓ Certificate</span>}
+                      <div className={styles.courseRating}>⭐ {c.rating}</div>
+                    </div>
+
+                    <a
+                      href={c.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`btn-primary ${styles.enrollBtn}`}
+                    >
+                      Enroll Free →
+                    </a>
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 
+      {/* Master Classes */}
       <section className={styles.section}>
         <div className="container">
           <div className={styles.sectionHeader}>
             <span className="section-tag">Master Classes</span>
             <h2 className="section-title">Deep-Dive <span>Master Classes</span></h2>
-            <p className="section-subtitle">Intensive monthly sessions led by our coaches and serial entrepreneurs. Limited seats for maximum interaction.</p>
+            <p className="section-subtitle">Intensive monthly sessions led by our coaches. Limited seats for maximum interaction.</p>
           </div>
           <div className={styles.masterGrid}>
             {masterclasses.map((m, i) => (

@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from server.routers import leads, mentors, institutes, ai_validator
+from server.routers import leads, mentors, institutes, ai_validator, courses
 
 app = FastAPI(title="IgnitegenZ API", version="1.0.0")
 
@@ -20,6 +20,7 @@ app.include_router(leads.router)
 app.include_router(mentors.router)
 app.include_router(institutes.router)
 app.include_router(ai_validator.router)
+app.include_router(courses.router)
 
 
 @app.get("/api/health")
