@@ -64,7 +64,7 @@ export default function Contact() {
             <div className={styles.infoCol}>
               <h2>Let's Build Something Together</h2>
               <p className={styles.infoDesc}>
-                Whether you have a fully-formed idea or just a hunch that something needs to change — we want to hear from you. IgniteZen is built for ambitious thinkers like you.
+                Whether you have a fully-formed idea or just a hunch that something needs to change — we want to hear from you. IgnitegenZ is built for ambitious thinkers like you.
               </p>
 
               <div className={styles.contactInfo}>

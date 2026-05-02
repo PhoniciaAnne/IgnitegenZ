@@ -20,7 +20,7 @@ export default function Footer() {
                     </linearGradient>
                   </defs>
                 </svg>
-                <span className={styles.logoText}>IgniteZen</span>
+                <span className={styles.logoText}>IgnitegenZ</span>
               </div>
               <p className={styles.tagline}>Together We Thrive</p>
               <p className={styles.desc}>
@@ -63,7 +63,7 @@ export default function Footer() {
       </div>
       <div className={styles.bottom}>
         <div className="container">
-          <p>© {new Date().getFullYear()} IgniteZen. All rights reserved. Built for ambitious entrepreneurs.</p>
+          <p>© {new Date().getFullYear()} IgnitegenZ. All rights reserved. Built for ambitious entrepreneurs.</p>
         </div>
       </div>
     </footer>

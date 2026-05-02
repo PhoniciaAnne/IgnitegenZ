@@ -58,7 +58,7 @@ export default function Admin() {
           <div className={styles.headerInner}>
             <div>
               <h1>Admin Dashboard</h1>
-              <p>Live idea submissions from IgniteZen — auto-refreshes every 15 seconds</p>
+              <p>Live idea submissions from IgnitegenZ — auto-refreshes every 15 seconds</p>
             </div>
             <div className={styles.headerRight}>
               <div className={styles.liveIndicator}>
@@ -179,7 +179,7 @@ export default function Admin() {
 
                 <div className={styles.leadFooter}>
                   <span className={styles.idBadge}>#{lead.id}</span>
-                  <a href={`mailto:${lead.email}?subject=Re: Your IgniteZen Application`} className={styles.replyBtn}>
+                  <a href={`mailto:${lead.email}?subject=Re: Your IgnitegenZ Application`} className={styles.replyBtn}>
                     Reply via Email →
                   </a>
                 </div>

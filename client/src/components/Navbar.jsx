@@ -42,7 +42,7 @@ export default function Navbar() {
               </defs>
             </svg>
           </div>
-          <span className={styles.logoText}>IgniteZen</span>
+          <span className={styles.logoText}>IgnitegenZ</span>
         </Link>
 
         <ul className={`${styles.navLinks} ${menuOpen ? styles.open : ''}`}>

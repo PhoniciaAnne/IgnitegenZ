@@ -53,3 +53,8 @@ externalPort = 80
 [[ports]]
 localPort = 8000
 externalPort = 8000
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["bash", "run_prod.sh"]
+build = ["bash", "run_prod.sh"]
