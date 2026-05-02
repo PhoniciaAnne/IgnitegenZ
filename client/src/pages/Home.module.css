@@ -1,0 +1,315 @@
+.hero {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a0533 0%, #2d0a6e 40%, #4c1aab 70%, #6930c3 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 80px;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(123,47,255,0.25) 0%, transparent 70%);
+}
+
+.heroParticles { position: absolute; inset: 0; }
+
+.particle {
+  position: absolute;
+  width: calc(4px + var(--i) * 2px);
+  height: calc(4px + var(--i) * 2px);
+  background: rgba(192,132,252,calc(0.3 + var(--i) * 0.05));
+  border-radius: 50%;
+  top: calc(10% + var(--i) * 12%);
+  left: calc(5% + var(--i) * 16%);
+  animation: float calc(4s + var(--i) * 1s) ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from { transform: translateY(0) rotate(0deg); }
+  to { transform: translateY(-20px) rotate(180deg); }
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 60px 24px 160px;
+}
+
+.heroBadge {
+  display: inline-block;
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.9);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  backdrop-filter: blur(8px);
+}
+
+.heroTitle {
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+
+.heroTitle span {
+  background: linear-gradient(135deg, #c084fc, #e879f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroSubtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  color: rgba(255,255,255,0.78);
+  max-width: 620px;
+  margin: 0 auto 40px;
+  line-height: 1.75;
+}
+
+.heroCta {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.heroSecondary {
+  color: rgba(255,255,255,0.85);
+  font-weight: 600;
+  font-size: 15px;
+  transition: color 0.2s;
+}
+.heroSecondary:hover { color: white; }
+
+.statsBar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  background: rgba(255,255,255,0.06);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 24px 0;
+}
+
+.statItem {
+  text-align: center;
+  border-right: 1px solid rgba(255,255,255,0.1);
+  padding: 8px;
+}
+.statItem:last-child { border-right: none; }
+
+.statValue {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: white;
+  line-height: 1.1;
+}
+
+.statLabel {
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* Section base */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Founders Foundry */
+.foundry {
+  padding: 100px 0;
+  background: #f9fafb;
+}
+
+.foundryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.foundryCard {
+  padding: 36px 28px;
+  position: relative;
+}
+
+.foundryStep {
+  font-family: 'Poppins', sans-serif;
+  font-size: 48px;
+  font-weight: 800;
+  color: rgba(105,48,195,0.07);
+  position: absolute;
+  top: 16px; right: 20px;
+  line-height: 1;
+}
+
+.foundryIcon {
+  font-size: 40px;
+  margin-bottom: 16px;
+}
+
+.foundryCard h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 10px;
+}
+
+.foundryCard p {
+  font-size: 14px;
+  color: #4b5563;
+  line-height: 1.7;
+}
+
+/* Education */
+.education {
+  padding: 100px 0;
+  background: white;
+}
+
+.eduGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.eduCard {
+  padding: 40px 32px;
+  text-align: center;
+}
+
+.eduIcon {
+  width: 80px; height: 80px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+}
+
+.eduCard h3 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.eduCard p {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.eduLink {
+  font-weight: 600;
+  font-size: 14px;
+  transition: opacity 0.2s;
+}
+.eduLink:hover { opacity: 0.7; }
+
+/* AI Section */
+.aiSection {
+  padding: 100px 0;
+  background: #faf5ff;
+}
+
+/* CTA */
+.ctaSection {
+  padding: 80px 0;
+  background: white;
+}
+
+.ctaBox {
+  background: linear-gradient(135deg, #2d0a6e 0%, #4c1aab 50%, #6930c3 100%);
+  border-radius: 32px;
+  padding: 72px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaGlow {
+  position: absolute;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(192,132,252,0.3) 0%, transparent 70%);
+  top: -100px; right: -100px;
+  border-radius: 50%;
+}
+
+.ctaBox h2 {
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 800;
+  color: white;
+  margin-bottom: 16px;
+  position: relative;
+}
+
+.ctaBox h2 span {
+  background: linear-gradient(135deg, #c084fc, #e879f9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.ctaBox p {
+  font-size: 17px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 36px;
+  position: relative;
+}
+
+.ctaBtns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.ctaBtns .btn-outline {
+  color: white;
+  border-color: rgba(255,255,255,0.5);
+}
+.ctaBtns .btn-outline:hover {
+  background: white;
+  color: #6930c3;
+  border-color: white;
+}
+
+@media (max-width: 900px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+  .foundryGrid { grid-template-columns: repeat(2, 1fr); }
+  .eduGrid { grid-template-columns: 1fr; }
+  .ctaBox { padding: 48px 24px; }
+}
+
+@media (max-width: 480px) {
+  .foundryGrid { grid-template-columns: 1fr; }
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+}

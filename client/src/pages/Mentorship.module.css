@@ -1,0 +1,103 @@
+.section { padding: 80px 0; }
+
+.filters {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+
+.filterBtn {
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 600;
+  border: 2px solid #e5e7eb;
+  background: white;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.filterBtn:hover { border-color: #6930c3; color: #6930c3; }
+.filterBtn.active { background: #6930c3; color: white; border-color: #6930c3; }
+
+.loading {
+  text-align: center;
+  padding: 80px 0;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 40px; height: 40px;
+  border: 3px solid #f3e8ff;
+  border-top-color: #6930c3;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.mentorsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.mentorCard { padding: 28px; display: flex; flex-direction: column; gap: 16px; }
+
+.mentorTop { display: flex; justify-content: space-between; align-items: flex-start; }
+
+.avatar {
+  width: 72px; height: 72px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mentorInfo {}
+.mentorInfo h3 { font-size: 18px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+
+.mentorTitle { font-size: 13px; color: #6930c3; font-weight: 500; margin-bottom: 10px; }
+
+.mentorBio { font-size: 13px; color: #4b5563; line-height: 1.65; }
+
+.expertise { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.expertiseTag {
+  background: #f3f4f6;
+  color: #374151;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 50px;
+}
+
+.mentorActions { display: flex; gap: 10px; margin-top: 4px; }
+
+/* Become Mentor */
+.becomeMentor { padding: 60px 0; background: #faf5ff; }
+
+.becomeBox {
+  background: linear-gradient(135deg, #2d0a6e, #4c1aab);
+  border-radius: 24px;
+  padding: 48px 52px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  color: white;
+}
+
+.becomeBox h2 { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+.becomeBox p { font-size: 15px; opacity: 0.8; }
+
+@media (max-width: 900px) {
+  .mentorsGrid { grid-template-columns: repeat(2, 1fr); }
+  .becomeBox { flex-direction: column; text-align: center; padding: 36px 28px; }
+}
+
+@media (max-width: 600px) {
+  .mentorsGrid { grid-template-columns: 1fr; }
+}

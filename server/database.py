@@ -1,149 +1,127 @@
+import sqlite3
 import os
-from supabase import create_client, Client
-from dotenv import load_dotenv
+import json
 
-load_dotenv()
-
-SUPABASE_URL = os.getenv("SUPABASE_URL", "")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
-
-supabase: Client = None
-
-def get_supabase() -> Client:
-    global supabase
-    if SUPABASE_URL and SUPABASE_KEY and not supabase:
-        supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-    return supabase
+DB_PATH = os.path.join(os.path.dirname(__file__), "ignite_zen.db")
 
 
-SEED_MENTORS = [
-    {
-        "id": 1,
-        "name": "Vasudeva Vangara",
-        "title": "Technology Strategist & CTO Advisor",
-        "category": "Technology",
-        "bio": "Seasoned technology leader with 20+ years of experience helping startups scale their tech infrastructure. Former CTO at multiple successful ventures.",
-        "expertise": ["Cloud Architecture", "AI/ML Strategy", "Product Development", "Tech Scaling"],
-        "avatar_url": None,
-        "linkedin_url": "#"
-    },
-    {
-        "id": 2,
-        "name": "Dr. Tinoo Ubale",
-        "title": "Sustainability & Impact Expert",
-        "category": "Sustainability",
-        "bio": "PhD in Environmental Sciences with a focus on sustainable business models. Advisor to 30+ green startups and social enterprises across South Asia.",
-        "expertise": ["Green Technology", "Impact Measurement", "Circular Economy", "ESG Strategy"],
-        "avatar_url": None,
-        "linkedin_url": "#"
-    },
-    {
-        "id": 3,
-        "name": "Abhay Prajapati",
-        "title": "EdTech Founder & Education Innovation Lead",
-        "category": "Education",
-        "bio": "Pioneer in technology-enabled learning solutions. Founded three ed-tech companies and mentored over 200 student entrepreneurs across India.",
-        "expertise": ["EdTech", "Curriculum Design", "Student Entrepreneurship", "Learning Analytics"],
-        "avatar_url": None,
-        "linkedin_url": "#"
-    },
-    {
-        "id": 4,
-        "name": "Priya Sharma",
-        "title": "Full-Stack Developer & Startup CTO",
-        "category": "Technology",
-        "bio": "Serial entrepreneur with expertise in building scalable web applications. Helped 50+ startups go from zero to first million users.",
-        "expertise": ["Web Development", "Mobile Apps", "System Design", "DevOps"],
-        "avatar_url": None,
-        "linkedin_url": "#"
-    },
-    {
-        "id": 5,
-        "name": "Dr. Ananya Krishnan",
-        "title": "Clean Energy & Climate Tech Advisor",
-        "category": "Sustainability",
-        "bio": "Leading expert in renewable energy startups and climate tech investment. Advises governments and private sector on sustainable innovation.",
-        "expertise": ["Renewable Energy", "Climate Finance", "Sustainable Policy", "Green Startups"],
-        "avatar_url": None,
-        "linkedin_url": "#"
-    },
-    {
-        "id": 6,
-        "name": "Prof. Rajan Mehta",
-        "title": "Higher Education & Pedagogy Expert",
-        "category": "Education",
-        "bio": "Professor of Education at IIT Bombay with 25 years of experience redesigning curricula for the digital age and entrepreneurship ecosystem.",
-        "expertise": ["Higher Education", "Pedagogy", "Research Commercialization", "STEM Education"],
-        "avatar_url": None,
-        "linkedin_url": "#"
-    }
-]
+def get_db():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
 
-SEED_INSTITUTES = [
-    {
-        "id": 1,
-        "name": "TechHub Mumbai",
-        "type": "Co-working Space",
-        "city": "Mumbai",
-        "area": "Bandra Kurla Complex",
-        "description": "Premium co-working space with state-of-the-art labs and mentorship programs for tech startups.",
-        "facilities": ["High-Speed Internet", "3D Printing Lab", "Conference Rooms", "Startup Library"],
-        "contact_email": "hello@techhubmumbai.in",
-        "website": "https://techhubmumbai.in"
-    },
-    {
-        "id": 2,
-        "name": "IIT Bombay Innovation Cell",
-        "type": "University Lab",
-        "city": "Mumbai",
-        "area": "Powai",
-        "description": "World-class innovation lab affiliated with IIT Bombay offering incubation and research facilities.",
-        "facilities": ["Biotech Lab", "Electronics Workshop", "Prototyping Studio", "Investor Network"],
-        "contact_email": "innovation@iitb.ac.in",
-        "website": "https://www.iitb.ac.in"
-    },
-    {
-        "id": 3,
-        "name": "Pune Startup Garage",
-        "type": "Co-working Space",
-        "city": "Pune",
-        "area": "Koregaon Park",
-        "description": "A vibrant startup ecosystem hub connecting entrepreneurs with mentors, investors, and peers.",
-        "facilities": ["Meeting Pods", "Event Space", "Hot Desks", "Virtual Office"],
-        "contact_email": "info@punegarage.co",
-        "website": "#"
-    },
-    {
-        "id": 4,
-        "name": "Nashik AgriTech Lab",
-        "type": "Research Lab",
-        "city": "Nashik",
-        "area": "MIDC",
-        "description": "Specialized research facility for agri-tech and food innovation startups with field testing capabilities.",
-        "facilities": ["Soil Testing Lab", "Cold Storage", "R&D Kitchen", "Field Plots"],
-        "contact_email": "contact@nashikagritech.in",
-        "website": "#"
-    },
-    {
-        "id": 5,
-        "name": "Hyderabad Cyber Labs",
-        "type": "Co-working Space",
-        "city": "Hyderabad",
-        "area": "HITEC City",
-        "description": "Cybersecurity and AI-focused innovation lab with government-backed incubation support.",
-        "facilities": ["Cyber Range", "AI GPU Cluster", "Legal Support", "Investor Days"],
-        "contact_email": "reach@hydcyberlabs.in",
-        "website": "#"
-    },
-    {
-        "id": 6,
-        "name": "Bengaluru Design Studio",
-        "type": "Co-working Space",
-        "city": "Bengaluru",
-        "area": "Indiranagar",
-        "description": "Creative co-working space for product designers, UX researchers, and consumer-tech startups.",
-        "facilities": ["Design Lab", "User Testing Room", "Photography Studio", "Coffee Bar"],
-        "contact_email": "studio@blrdesign.in",
-        "website": "#"
-    }
-]
+
+def init_db():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS leads (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL,
+            problem_statement TEXT NOT NULL,
+            solution TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS mentors (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            title TEXT NOT NULL,
+            category TEXT NOT NULL,
+            bio TEXT,
+            expertise TEXT,
+            avatar_url TEXT,
+            linkedin_url TEXT
+        )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS institutes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            type TEXT NOT NULL,
+            city TEXT NOT NULL,
+            area TEXT NOT NULL,
+            description TEXT,
+            facilities TEXT,
+            contact_email TEXT,
+            website TEXT
+        )
+    """)
+
+    cursor.execute("SELECT COUNT(*) FROM mentors")
+    if cursor.fetchone()[0] == 0:
+        mentors = [
+            ("Vasudeva Vangara", "Startup Coach at VDC-GITAM", "Technology",
+             "Seasoned startup coach and technology strategist with 20+ years of experience helping student entrepreneurs scale their ideas into real ventures.",
+             json.dumps(["Cloud Architecture", "AI/ML Strategy", "Product Development", "Tech Scaling"]),
+             None, "#"),
+            ("Dr. Tinoo Ubale", "Entrepreneurship Program Manager", "Sustainability",
+             "PhD holder and entrepreneurship program manager with deep expertise in sustainable business models and green innovation for student startups.",
+             json.dumps(["Green Technology", "Impact Measurement", "Circular Economy", "ESG Strategy"]),
+             None, "#"),
+            ("Abhay Prajapati", "Startup Coach | AVC @ VDC, GITAM", "Education",
+             "Pioneer in technology-enabled learning solutions and a startup coach mentoring student entrepreneurs across India.",
+             json.dumps(["EdTech", "Curriculum Design", "Student Entrepreneurship", "Learning Analytics"]),
+             None, "#"),
+            ("Priya Sharma", "Full-Stack Developer & Startup CTO", "Technology",
+             "Serial entrepreneur with expertise in building scalable web applications. Helped 50+ startups reach their first users.",
+             json.dumps(["Web Development", "Mobile Apps", "System Design", "DevOps"]),
+             None, "#"),
+            ("Dr. Ananya Krishnan", "Clean Energy & Climate Tech Advisor", "Sustainability",
+             "Leading expert in renewable energy startups and climate tech investment across South Asia.",
+             json.dumps(["Renewable Energy", "Climate Finance", "Sustainable Policy", "Green Startups"]),
+             None, "#"),
+            ("Prof. Rajan Mehta", "Higher Education & Pedagogy Expert", "Education",
+             "Professor with 25 years of experience redesigning curricula for the digital age and entrepreneurship ecosystem.",
+             json.dumps(["Higher Education", "Pedagogy", "Research Commercialization", "STEM Education"]),
+             None, "#"),
+        ]
+        cursor.executemany(
+            "INSERT INTO mentors (name, title, category, bio, expertise, avatar_url, linkedin_url) VALUES (?,?,?,?,?,?,?)",
+            mentors
+        )
+
+    cursor.execute("SELECT COUNT(*) FROM institutes")
+    if cursor.fetchone()[0] == 0:
+        institutes = [
+            ("TechHub Mumbai", "Co-working Space", "Mumbai", "Bandra Kurla Complex",
+             "Premium co-working space with state-of-the-art labs and mentorship programs for tech startups.",
+             json.dumps(["High-Speed Internet", "3D Printing Lab", "Conference Rooms", "Startup Library"]),
+             "hello@techhubmumbai.in", "https://techhubmumbai.in"),
+            ("IIT Bombay Innovation Cell", "University Lab", "Mumbai", "Powai",
+             "World-class innovation lab offering incubation and research facilities for student entrepreneurs.",
+             json.dumps(["Biotech Lab", "Electronics Workshop", "Prototyping Studio", "Investor Network"]),
+             "innovation@iitb.ac.in", "https://www.iitb.ac.in"),
+            ("Pune Startup Garage", "Co-working Space", "Pune", "Koregaon Park",
+             "A vibrant startup ecosystem hub connecting entrepreneurs with mentors, investors, and peers.",
+             json.dumps(["Meeting Pods", "Event Space", "Hot Desks", "Virtual Office"]),
+             "info@punegarage.co", "#"),
+            ("Nashik AgriTech Lab", "Research Lab", "Nashik", "MIDC",
+             "Specialized research facility for agri-tech and food innovation startups with field testing capabilities.",
+             json.dumps(["Soil Testing Lab", "Cold Storage", "R&D Kitchen", "Field Plots"]),
+             "contact@nashikagritech.in", "#"),
+            ("Hyderabad Cyber Labs", "Co-working Space", "Hyderabad", "HITEC City",
+             "Cybersecurity and AI-focused innovation lab with government-backed incubation support.",
+             json.dumps(["Cyber Range", "AI GPU Cluster", "Legal Support", "Investor Days"]),
+             "reach@hydcyberlabs.in", "#"),
+            ("Bengaluru Design Studio", "Co-working Space", "Bengaluru", "Indiranagar",
+             "Creative co-working space for product designers, UX researchers, and consumer-tech startups.",
+             json.dumps(["Design Lab", "User Testing Room", "Photography Studio", "Coffee Bar"]),
+             "studio@blrdesign.in", "#"),
+            ("T-Hub Hyderabad", "University Lab", "Hyderabad", "Madhapur",
+             "India's largest startup incubator providing pre-incubation, incubation, and acceleration programs.",
+             json.dumps(["Mentorship Network", "Investor Connect", "Workshops", "Government Support"]),
+             "info@t-hub.co", "https://t-hub.co"),
+        ]
+        cursor.executemany(
+            "INSERT INTO institutes (name, type, city, area, description, facilities, contact_email, website) VALUES (?,?,?,?,?,?,?,?)",
+            institutes
+        )
+
+    conn.commit()
+    conn.close()

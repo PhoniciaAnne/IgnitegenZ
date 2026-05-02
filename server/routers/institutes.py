@@ -1,44 +1,33 @@
+import json
 from fastapi import APIRouter, Query
 from typing import Optional
-from server.database import get_supabase, SEED_INSTITUTES
+from server.database import get_db
 
 router = APIRouter(prefix="/api/institutes", tags=["institutes"])
 
 
 @router.get("/")
 async def get_institutes(city: Optional[str] = Query(None), search: Optional[str] = Query(None)):
-    db = get_supabase()
-    if db:
-        try:
-            query = db.table("institutes").select("*")
-            if city and city != "All":
-                query = query.eq("city", city)
-            result = query.execute()
-            institutes = result.data
-            if search:
-                search_lower = search.lower()
-                institutes = [
-                    i for i in institutes
-                    if search_lower in i.get("name", "").lower()
-                    or search_lower in i.get("area", "").lower()
-                    or search_lower in i.get("description", "").lower()
-                ]
-            return institutes
-        except Exception:
-            pass
-
-    institutes = SEED_INSTITUTES
+    conn = get_db()
+    cursor = conn.cursor()
     if city and city != "All":
-        institutes = [i for i in institutes if i["city"] == city]
+        cursor.execute("SELECT * FROM institutes WHERE city = ?", (city,))
+    else:
+        cursor.execute("SELECT * FROM institutes")
+    rows = cursor.fetchall()
+    conn.close()
+    result = []
+    for row in rows:
+        d = dict(row)
+        d["facilities"] = json.loads(d["facilities"]) if d["facilities"] else []
+        result.append(d)
     if search:
-        search_lower = search.lower()
-        institutes = [
-            i for i in institutes
-            if search_lower in i["name"].lower()
-            or search_lower in i["area"].lower()
-            or search_lower in i["description"].lower()
+        s = search.lower()
+        result = [
+            i for i in result
+            if s in i["name"].lower() or s in i["area"].lower() or s in i["description"].lower()
         ]
-    return institutes
+    return result
 
 
 @router.get("/cities")

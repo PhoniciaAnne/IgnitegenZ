@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from server.database import init_db
 from server.routers import leads, mentors, institutes, ai_validator
 
 app = FastAPI(title="Ignite Zen API", version="1.0.0")
@@ -11,6 +12,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+init_db()
 
 app.include_router(leads.router)
 app.include_router(mentors.router)

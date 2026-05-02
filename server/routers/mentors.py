@@ -1,27 +1,27 @@
+import json
 from fastapi import APIRouter, Query
 from typing import Optional
-from server.database import get_supabase, SEED_MENTORS
+from server.database import get_db
 
 router = APIRouter(prefix="/api/mentors", tags=["mentors"])
 
 
 @router.get("/")
 async def get_mentors(category: Optional[str] = Query(None)):
-    db = get_supabase()
-    if db:
-        try:
-            query = db.table("mentors").select("*")
-            if category and category != "All":
-                query = query.eq("category", category)
-            result = query.execute()
-            return result.data
-        except Exception:
-            pass
-
-    mentors = SEED_MENTORS
+    conn = get_db()
+    cursor = conn.cursor()
     if category and category != "All":
-        mentors = [m for m in mentors if m["category"] == category]
-    return mentors
+        cursor.execute("SELECT * FROM mentors WHERE category = ?", (category,))
+    else:
+        cursor.execute("SELECT * FROM mentors")
+    rows = cursor.fetchall()
+    conn.close()
+    result = []
+    for row in rows:
+        d = dict(row)
+        d["expertise"] = json.loads(d["expertise"]) if d["expertise"] else []
+        result.append(d)
+    return result
 
 
 @router.get("/categories")
