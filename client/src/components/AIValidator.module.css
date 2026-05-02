@@ -1,0 +1,144 @@
+.wrapper { max-width: 860px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px; }
+
+.inputBox {
+  background: white;
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 4px 30px rgba(105,48,195,0.12);
+  border: 1px solid #ede9fe;
+}
+
+.inputLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 15px;
+  color: #1f2937;
+  margin-bottom: 14px;
+}
+
+.textarea {
+  width: 100%;
+  padding: 16px 18px;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  font-size: 15px;
+  font-family: inherit;
+  color: #1f2937;
+  resize: vertical;
+  transition: all 0.2s;
+  line-height: 1.6;
+}
+.textarea:focus { border-color: #7b2fff; box-shadow: 0 0 0 3px rgba(123,47,255,0.1); outline: none; }
+.textarea::placeholder { color: #9ca3af; }
+
+.error { color: #dc2626; font-size: 13px; margin-top: 8px; }
+
+.validateBtn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 16px;
+  background: linear-gradient(135deg, #6930c3, #7b2fff);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 8px 30px rgba(105,48,195,0.35);
+}
+.validateBtn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(105,48,195,0.5); }
+.validateBtn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.loadingRow { display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+.spinner {
+  width: 18px; height: 18px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.report {
+  background: white;
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow: 0 4px 30px rgba(105,48,195,0.12);
+  border: 1px solid #ede9fe;
+}
+
+.reportHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.reportHeader h3 { font-size: 22px; font-weight: 800; color: #1f2937; }
+
+.scoreBox { text-align: center; }
+
+.scoreFill {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: conic-gradient(var(--clr) var(--pct), #f3f4f6 0);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 6px;
+  position: relative;
+}
+
+.scoreFill::before {
+  content: '';
+  position: absolute;
+  width: 58px; height: 58px;
+  background: white;
+  border-radius: 50%;
+}
+
+.scoreFill span, .scoreFill small { position: relative; z-index: 1; }
+.scoreFill span { font-size: 20px; font-weight: 800; line-height: 1; }
+.scoreFill small { font-size: 10px; color: #9ca3af; }
+.scoreBox p { font-size: 12px; color: #6b7280; font-weight: 500; }
+
+.reportGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px; }
+
+.reportCard { border: 1px solid #f3f4f6; border-top: 3px solid; border-radius: 16px; padding: 20px; }
+
+.reportCardHeader { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.reportCardHeader h4 { font-size: 14px; font-weight: 700; }
+.reportCardHeader span { font-size: 18px; }
+.reportCard p { font-size: 14px; color: #4b5563; line-height: 1.7; }
+
+.recommendations { background: #faf5ff; border-radius: 16px; padding: 24px; }
+.recommendations h4 { font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 16px; }
+.recommendations ul { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+.recommendations li { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; color: #374151; line-height: 1.6; }
+
+.recNum {
+  flex-shrink: 0;
+  width: 24px; height: 24px;
+  background: linear-gradient(135deg, #6930c3, #7b2fff);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .reportGrid { grid-template-columns: 1fr; }
+  .inputBox, .report { padding: 24px 20px; }
+}
